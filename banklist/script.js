@@ -61,6 +61,7 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+
 const displayMovements = function(movements) {
   containerMovements.innerHTML='';
   movements.forEach(function(movement,i) {
@@ -76,4 +77,46 @@ const displayMovements = function(movements) {
   
 }
 
-displayMovements(account1.movements);
+const calcDisplayBalance = function(movements) {
+  const balance = movements.reduce((res,mov)=>res+mov,0);
+  labelBalance.textContent = balance + '€';
+}
+
+const calcDisplaySummary = function(acct) {
+  const incoming = acct.movements.filter(mov=>mov>0).reduce((res,mov)=>res+mov,0);
+  const outgoing = acct.movements.filter(mov=>mov<0).reduce((res,mov)=>res+mov,0);
+  const interest = acct.movements.filter(mov=>mov>0).map(mov=>(mov*acct.interestRate)/100)
+   .filter(int=>int>=1).reduce((res,int)=>res+int,0);
+  labelSumIn.textContent = incoming + '€';
+  labelSumOut.textContent = Math.abs(outgoing) + '€';
+  labelSumInterest.textContent=interest+'€';
+}
+
+const createUserNames = function(accts) {
+  accts.forEach(account=>account.username = account.owner.split(" ").map(mov=>mov[0]).join("").toLowerCase());
+}
+
+let currentAccount;
+
+const loggin = function(event,accts) {
+  event.preventDefault();
+  const username = inputLoginUsername.value;
+  const pin = Number(inputLoginPin.value);
+  currentAccount = accts.find(account=>username===account.username && account.pin === pin);
+  if(currentAccount) {
+    labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(" ")[0]}`;
+    displayMovements(currentAccount.movements);
+    calcDisplayBalance(currentAccount.movements);
+    calcDisplaySummary(currentAccount);
+    containerApp.style.opacity = 100;
+  } else {
+    containerApp.style.opacity = 0;
+    labelWelcome.textContent = 'Log in to get started';
+  }
+  inputLoginUsername.value='';
+  inputLoginPin.value='';
+  inputLoginPin.blur();
+}
+
+btnLogin.addEventListener('click',e=>loggin(e,accounts));
+createUserNames(accounts);
