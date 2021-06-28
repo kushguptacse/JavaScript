@@ -46,5 +46,7 @@ const getCountryData = function (countryName) {
     request.addEventListener('load', handleResponse);
 }
 
-const input = ['bharat'];
-input.forEach(country => getCountryData(country));
+btn.addEventListener('click',()=>{
+    const input = ['bharat'];
+    input.forEach(country => getCountryData(country));
+});
