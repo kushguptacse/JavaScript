@@ -1,6 +1,6 @@
 'use strict';
 
-const btn = document.querySelector('.btn-country');
+const btn1 = document.querySelector('.btn1');
 const countriesContainer = document.querySelector('.countries');
 
 ///////////////////////////////////////
@@ -47,8 +47,8 @@ const handleError = function(msg) {
     countriesContainer.insertAdjacentText('beforeend',msg);
 }
 
-// btn.addEventListener('click',()=>{
-//     countriesContainer.innerHTML='';
-//     const input = ['bharat'];
-//     input.forEach(country => getCountryData(country));
-// });
+btn1.addEventListener('click', () => {
+    countriesContainer.innerHTML = '';
+    const input = ['bharat'];
+    input.forEach(country => getCountryData(country));
+});
