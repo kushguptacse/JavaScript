@@ -47,8 +47,8 @@ const handleError = function(msg) {
     countriesContainer.insertAdjacentText('beforeend',msg);
 }
 
-btn.addEventListener('click',()=>{
-    countriesContainer.innerHTML='';
-    const input = ['bharat'];
-    input.forEach(country => getCountryData(country));
-});
+// btn.addEventListener('click',()=>{
+//     countriesContainer.innerHTML='';
+//     const input = ['bharat'];
+//     input.forEach(country => getCountryData(country));
+// });
