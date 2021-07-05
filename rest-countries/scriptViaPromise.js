@@ -8,7 +8,7 @@ const handleResponse = function (resp) {
     const [respData] = resp;
     displayResponse(respData);
     const neighbour = respData.borders[0];
-    return fetch(`https://restcountries.eu/rest/v2/alpha/${neighbour}`);
+    return getJson(`https://restcountries.eu/rest/v2/alpha/${neighbour}`,`neighbour not found`);
 }
 
 const displayResponse = function (respData, className = '') {
@@ -24,18 +24,31 @@ const displayResponse = function (respData, className = '') {
                 </div>
             </article> `;
     countriesContainer.insertAdjacentHTML('beforeend', html);
-    countriesContainer.style.opacity = 1;
 }
 
 const getCountryData = function (countryName) {
-    fetch(`https://restcountries.eu/rest/v2/name/${countryName}`).
-    then(resp => resp.json()).
+    getJson(`https://restcountries.eu/rest/v2/name/${countryName}`,`country ${countryName} not found`).
     then(handleResponse).
-    then(resp1 => resp1.json()).
-    then(responseData => displayResponse(responseData, 'neighbour'));
+    then(responseData => displayResponse(responseData, 'neighbour')).
+    catch(err=>handleError(err.message)).
+    finally(()=> countriesContainer.style.opacity=1);
+}
+
+const getJson = function (url,msg='something went wrong') {
+    return fetch(url).then(resp => {
+        if (!resp.ok) {
+            throw new Error(msg);
+        }
+        return resp.json();
+    });
+}
+
+const handleError = function(msg) {
+    countriesContainer.insertAdjacentText('beforeend',msg);
 }
 
 btn.addEventListener('click',()=>{
-    const input = ['japan'];
+    countriesContainer.innerHTML='';
+    const input = ['bharat'];
     input.forEach(country => getCountryData(country));
 });
