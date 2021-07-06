@@ -8,7 +8,6 @@ const handleResponse = function () {
     const [respData] = JSON.parse(this.responseText);
     displayResponse(respData);
     const neighbours = respData.borders || [];
-    console.log(neighbours);
     let count = 0;
     for (const neighbour of neighbours) {
         if (count++ === 2) {
